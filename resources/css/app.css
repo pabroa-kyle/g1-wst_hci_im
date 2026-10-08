@@ -1,0 +1,241 @@
+@import '@fontsource-variable/archivo/wdth.css';
+@import 'tailwindcss';
+
+@source '../**/*.blade.php';
+@source '../**/*.js';
+@source not '../views/templates';
+
+/*
+ * Folio — Identity Program.
+ * One ultramarine ink plate, cool white card stock, and a single neutral ramp
+ * (n-*) that every grey in the app comes from. Coral is reserved for unsaved
+ * changes and nothing else.
+ */
+@theme {
+    --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+
+    /* Ink: the solid plate */
+    --color-ink-50: #f1f2fd;
+    --color-ink-100: #e2e5fb;
+    --color-ink-200: #c6ccf6;
+    --color-ink-300: #9aa4ee;
+    --color-ink-400: #5b6ce0;
+    --color-ink-500: #1f33c9;
+    --color-ink-600: #1828a6;
+    --color-ink-700: #121f80;
+    --color-ink-800: #0d175e;
+    --color-ink-900: #0a1145;
+
+    /* The one neutral ramp, tinted toward the ink */
+    --color-n-0: #ffffff;
+    --color-n-50: #f6f7fb;
+    --color-n-100: #eceef5;
+    --color-n-200: #dadde8;
+    --color-n-300: #bfc3d3;
+    --color-n-400: #9398ae;
+    --color-n-500: #646982;
+    --color-n-600: #4c5168;
+    --color-n-700: #373b4f;
+    --color-n-800: #232637;
+    --color-n-900: #151726;
+    --color-n-950: #0d0f1a;
+
+    /* Unsaved state only */
+    --color-coral-50: #fff1ed;
+    --color-coral-400: #ff5a36;
+    --color-coral-600: #c9381a;
+
+    /* Saved / complete */
+    --color-go-50: #eaf7f0;
+    --color-go-400: #16a06a;
+    --color-go-700: #0d6e48;
+
+    /* Destructive */
+    --color-danger-50: #fdeeee;
+    --color-danger-600: #b42318;
+    --color-danger-700: #911b12;
+
+    --radius-sheet: 2px;
+    --radius-ui: 4px;
+
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+    html {
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        scrollbar-color: var(--color-n-300) transparent;
+    }
+
+    body {
+        @apply bg-n-50 text-n-900;
+        font-variant-numeric: tabular-nums;
+    }
+
+    ::selection {
+        background: var(--color-ink-500);
+        color: #fff;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-ink-500);
+        outline-offset: 2px;
+    }
+
+    a {
+        text-underline-offset: 0.2em;
+        text-decoration-thickness: 1px;
+    }
+
+    input,
+    textarea,
+    select {
+        caret-color: var(--color-ink-500);
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--color-n-300);
+        border: 3px solid transparent;
+        border-radius: 999px;
+        background-clip: content-box;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+/* Extended grotesk: the identity voice */
+@utility font-wide {
+    font-stretch: 125%;
+}
+
+@utility font-semiwide {
+    font-stretch: 112%;
+}
+
+/* Spec caption: the identity manual's labelling voice. Sits beside or below
+   the thing it describes, never as an eyebrow above a heading. */
+@utility spec {
+    font-stretch: 125%;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.3;
+}
+
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-(--radius-ui) px-4 py-2.5 text-sm font-semibold whitespace-nowrap transition-colors duration-150 select-none;
+        @apply disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    .btn svg {
+        @apply size-4 shrink-0;
+    }
+
+    .btn-primary {
+        @apply bg-ink-500 text-white hover:bg-ink-600 active:bg-ink-700;
+    }
+
+    .btn-secondary {
+        @apply border border-n-300 bg-n-0 text-n-900 hover:border-n-400 hover:bg-n-50;
+    }
+
+    .btn-ghost {
+        @apply text-n-700 hover:bg-n-100 hover:text-n-900;
+    }
+
+    .btn-danger {
+        @apply bg-danger-600 text-white hover:bg-danger-700;
+    }
+
+    .btn-on-ink {
+        @apply bg-white text-ink-600 hover:bg-ink-50;
+    }
+
+    .btn-sm {
+        @apply px-3 py-1.5 text-[0.8125rem];
+    }
+
+    .btn-lg {
+        @apply px-5 py-3 text-base;
+    }
+
+    .field-label {
+        @apply mb-1.5 flex items-baseline justify-between gap-2 text-sm font-semibold text-n-800;
+    }
+
+    .field-label .optional {
+        @apply text-xs font-normal text-n-500;
+    }
+
+    .field-input {
+        @apply block w-full rounded-(--radius-ui) border border-n-300 bg-n-0 px-3 py-2.5 text-[0.9375rem] text-n-900 transition-colors duration-150 placeholder:text-n-400;
+        @apply hover:border-n-400 focus:border-ink-500 focus:ring-3 focus:ring-ink-100 focus:outline-none;
+    }
+
+    .field-input[aria-invalid='true'] {
+        @apply border-danger-600 focus:ring-danger-50;
+    }
+
+    textarea.field-input {
+        @apply min-h-28 resize-y leading-relaxed;
+    }
+
+    .field-help {
+        @apply mt-1.5 text-[0.8125rem] text-n-500;
+    }
+
+    .field-error {
+        @apply mt-1.5 flex items-center gap-1.5 text-[0.8125rem] font-medium text-danger-600;
+    }
+
+    /* A sheet of card stock lying on the table: the only element that casts a shadow. */
+    .sheet {
+        @apply relative overflow-hidden rounded-(--radius-sheet) bg-white;
+        box-shadow:
+            0 0 0 1px rgb(13 15 26 / 0.06),
+            0 18px 32px -20px rgb(10 17 69 / 0.45);
+    }
+
+    /* A changed, unsaved field holds coral until the form is saved. */
+    [data-field].is-dirty > .field-label > span:first-child::after {
+        content: '';
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        margin-left: 0.5rem;
+        border-radius: 999px;
+        background: var(--color-coral-400);
+        vertical-align: 0.1em;
+    }
+
+    [data-field].is-dirty .field-input {
+        @apply border-coral-400;
+    }
+
+    .panel {
+        @apply rounded-(--radius-ui) border border-n-200 bg-n-0;
+    }
+
+    .hairline {
+        @apply border-n-200;
+    }
+}

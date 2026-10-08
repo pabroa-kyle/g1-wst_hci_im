@@ -1,93 +1,74 @@
-# g1-wst_hci_im
+# Folio: Online Portfolio Template Generator
 
+WST · HCI · IM, Group 1.
 
+Folio lets users enter their portfolio information, save it to an online PostgreSQL database (Supabase), choose one of three templates (Simple, Modern, Creative), preview it, and generate their portfolio.
 
-## Getting started
+**Stack:** Laravel 12 (PHP 8.2+), Blade, Tailwind CSS v4, Alpine.js, PostgreSQL on Supabase, Supabase Storage for profile pictures, Railway for hosting.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Features
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+- Accounts (register / log in). Each user manages only their own portfolios.
+- Six-step form that saves each section separately: Personal (name, photo, email, contact number, address, about me), Education, Skills (with level), Projects, Work Experience, Social & Website Links.
+- Three noticeably different templates, rendered live with the user's own data.
+- Preview at desktop, tablet, and phone widths; generate; open the full page.
+- Manage Portfolio dashboard: view, edit, change template, and delete, with completion progress per section.
+- "Start from sample data" for quick testing.
 
-## Add your files
+## Required flow → where it lives
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+| Step | Route |
+|---|---|
+| Home | `/` |
+| Create portfolio | `/portfolios/create` |
+| Enter information / save | `/portfolios/{id}/edit/{personal,education,skills,projects,experience,links}` |
+| Select template | `/portfolios/{id}/template` |
+| Generate | `POST /portfolios/{id}/generate` |
+| Preview | `/portfolios/{id}/preview` (full page: `/portfolios/{id}`) |
+| Edit / delete (Manage Portfolio) | `/dashboard` |
 
+## Database (normalized)
+
+`users` → `portfolios` (personal info, chosen template, `generated_at`) → `educations`, `skills`, `projects`, `experiences`, `links` (each with `portfolio_id` FK, `ON DELETE CASCADE`, and `position` for ordering). See [the migration](database/migrations/2026_10_08_000100_create_portfolios_tables.php).
+
+## Run locally
+
+```bash
+composer install
+npm install
+cp .env.example .env        # then fill in the values below
+php artisan key:generate
+php artisan migrate
+php artisan storage:link
+npm run build
+php artisan serve
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/pabroa-kyle/g1-wst_hci_im.git
-git branch -M main
-git push -uf origin main
+
+For a quick local run without Supabase, set `DB_CONNECTION=sqlite` (and remove the other `DB_*` lines) and `PHOTO_DISK=public`.
+
+On Windows, enable `extension=pdo_pgsql` and `extension=pgsql` in `php.ini`.
+
+## Supabase setup
+
+1. Create a project at supabase.com.
+2. **Database:** open *Connect* → *Session pooler* and copy host, port, user (`postgres.<project-ref>`), and password into the `DB_*` variables. Use the **session pooler** (IPv4), not the direct connection, because Railway can't reach IPv6-only hosts. Keep `DB_SSLMODE=require`.
+3. **Storage:** create a **public** bucket named `portfolio-photos`. Under *Project Settings → Storage → S3 Connection*, create an access key and set `SUPABASE_S3_KEY`, `SUPABASE_S3_SECRET`, and `SUPABASE_S3_REGION` (the region shown on that page). Set `SUPABASE_URL=https://<project-ref>.supabase.co` and `PHOTO_DISK=supabase`.
+4. Run `php artisan migrate` once against Supabase (Railway also runs it before each deploy).
+
+## Deploy to Railway
+
+1. Push this repository to GitHub (or connect GitLab via a GitHub mirror) and create a Railway project from it. Railway's Railpack builder detects Laravel, installs PHP and Node dependencies, and runs `npm run build`.
+2. In the service's **Variables**, add everything from `.env.example`, plus:
+   - `APP_ENV=production`, `APP_DEBUG=false`
+   - `APP_KEY`: paste the output of `php artisan key:generate --show`
+   - `APP_URL`: your Railway URL, e.g. `https://folio-production.up.railway.app`
+3. Under **Settings → Networking**, click *Generate Domain* to get the public URL.
+4. `railway.json` runs `php artisan migrate --force` before each deploy and checks `/up` for health.
+
+## Tests
+
+```bash
+php artisan test
 ```
 
-## Integrate with your tools
-
-* [Set up project integrations](https://gitlab.com/pabroa-kyle/g1-wst_hci_im/-/settings/integrations)
-
-## Collaborate with your team
-
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+`tests/Feature/PortfolioFlowTest.php` covers the full required flow (create, save each section, choose template, generate, preview, every template rendering, delete) plus access control between users.

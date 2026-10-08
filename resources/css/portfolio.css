@@ -1,0 +1,50 @@
+/* Generated portfolio pages. Each template owns its own type and colour;
+   none of them borrow the Folio app's identity. */
+@import '@fontsource-variable/source-serif-4';
+@import '@fontsource-variable/sora';
+@import '@fontsource-variable/unbounded';
+@import '@fontsource-variable/karla';
+@import 'tailwindcss' source(none);
+
+@source '../views/templates';
+@source '../views/components/layouts/portfolio.blade.php';
+@source '../views/components/link-icon.blade.php';
+
+@theme {
+    --font-serif: 'Source Serif 4 Variable', Georgia, serif;
+    --font-sora: 'Sora Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-unbounded: 'Unbounded Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-karla: 'Karla Variable', ui-sans-serif, system-ui, sans-serif;
+
+    --animate-ticker: ticker 38s linear infinite;
+
+    @keyframes ticker {
+        to {
+            transform: translateX(-50%);
+        }
+    }
+}
+
+@layer base {
+    html {
+        -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+        text-underline-offset: 0.2em;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation: none !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+@utility text-outline {
+    -webkit-text-stroke: 1.5px var(--outline-color, #111);
+    color: transparent;
+}

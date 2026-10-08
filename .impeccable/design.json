@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-08T00:00:00Z",
+  "title": "Design System: Folio",
+  "extensions": {
+    "colorMeta": {
+      "ink-500": { "role": "primary", "displayName": "Ultramarine Ink Plate", "canonical": "#1f33c9", "tonalRamp": ["#0a1145", "#0d175e", "#121f80", "#1828a6", "#1f33c9", "#5b6ce0", "#9aa4ee", "#c6ccf6", "#e2e5fb", "#f1f2fd"] },
+      "ink-600": { "role": "primary", "displayName": "Pressed Ink", "canonical": "#1828a6" },
+      "ink-700": { "role": "primary", "displayName": "Deep Pressed Ink", "canonical": "#121f80" },
+      "ink-50": { "role": "primary", "displayName": "Ink Tint", "canonical": "#f1f2fd" },
+      "coral-400": { "role": "secondary", "displayName": "Unsaved Coral", "canonical": "#ff5a36", "tonalRamp": ["#c9381a", "#ff5a36", "#fff1ed"] },
+      "go-400": { "role": "secondary", "displayName": "Saved Green", "canonical": "#16a06a", "tonalRamp": ["#0d6e48", "#16a06a", "#eaf7f0"] },
+      "danger-600": { "role": "tertiary", "displayName": "Destructive Red", "canonical": "#b42318", "tonalRamp": ["#911b12", "#b42318", "#fdeeee"] },
+      "n-0": { "role": "neutral", "displayName": "Card Stock", "canonical": "#ffffff" },
+      "n-50": { "role": "neutral", "displayName": "Table", "canonical": "#f6f7fb" },
+      "n-100": { "role": "neutral", "displayName": "Tray", "canonical": "#eceef5" },
+      "n-200": { "role": "neutral", "displayName": "Hairline", "canonical": "#dadde8" },
+      "n-500": { "role": "neutral", "displayName": "Quiet Text", "canonical": "#646982" },
+      "n-900": { "role": "neutral", "displayName": "Ink Black Text", "canonical": "#151726", "tonalRamp": ["#0d0f1a", "#151726", "#232637", "#373b4f", "#4c5168", "#646982", "#9398ae", "#bfc3d3", "#dadde8", "#eceef5", "#f6f7fb", "#ffffff"] },
+      "n-950": { "role": "neutral", "displayName": "Heading Black", "canonical": "#0d0f1a" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The Home thesis only. Archivo at 125% width (font-stretch: 125%)." },
+      "headline": { "displayName": "Headline", "purpose": "Page titles and Home section heads, extended width." },
+      "title": { "displayName": "Title", "purpose": "Card, dialog and empty-state titles at 112% width." },
+      "body": { "displayName": "Body", "purpose": "Reading copy at normal width, measure 40 to 65ch; tabular numerals." },
+      "label": { "displayName": "Spec caption", "purpose": "Tracked uppercase labels that sit beside or below what they name, never above a heading." }
+    },
+    "shadows": [
+      { "name": "sheet", "value": "0 0 0 1px rgb(13 15 26 / 0.06), 0 18px 32px -20px rgb(10 17 69 / 0.45)", "purpose": "A paper sheet lying on the table. The only shadow in the system." }
+    ],
+    "motion": [
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Sheet lift (-4px) on hover and template outline changes, 200 to 300ms." },
+      { "name": "state-colors", "value": "150ms", "purpose": "Colour transitions on buttons, fields and nav items." },
+      { "name": "reduced-motion", "value": "0.01ms", "purpose": "All animation and transition durations collapse under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1536px" }
+    ],
+    "layout": {
+      "railWidth": "256px",
+      "grid": "12 columns",
+      "marketingMaxWidth": "90rem"
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid ink plate action: the one primary action per region.",
+      "html": "<button class=\"ds-btn ds-btn-primary\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg>New portfolio</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 4px; padding: 10px 16px; font-family: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; white-space: nowrap; border: 0; cursor: pointer; transition: background-color 150ms, border-color 150ms, color 150ms; } .ds-btn svg { width: 16px; height: 16px; flex-shrink: 0; } .ds-btn-primary { background: #1f33c9; color: #fff; } .ds-btn-primary:hover { background: #1828a6; } .ds-btn-primary:active { background: #121f80; } .ds-btn:focus-visible { outline: 2px solid #1f33c9; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "White card-stock button with a hairline stroke for alternative actions.",
+      "html": "<button class=\"ds-btn-secondary\">Start from sample data</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; gap: 8px; border-radius: 4px; padding: 10px 16px; font-family: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 600; background: #fff; color: #151726; border: 1px solid #bfc3d3; cursor: pointer; transition: background-color 150ms, border-color 150ms; } .ds-btn-secondary:hover { background: #f6f7fb; border-color: #9398ae; } .ds-btn-secondary:focus-visible { outline: 2px solid #1f33c9; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Quiet card actions (View, Edit, Template); destructive variant turns danger red.",
+      "html": "<div class=\"ds-ghost-row\"><button class=\"ds-btn-ghost\">View</button><button class=\"ds-btn-ghost ds-btn-ghost-danger\">Delete</button></div>",
+      "css": ".ds-ghost-row { display: flex; gap: 4px; } .ds-btn-ghost { border-radius: 4px; padding: 6px 12px; font-family: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 600; background: transparent; color: #373b4f; border: 0; cursor: pointer; transition: background-color 150ms, color 150ms; } .ds-btn-ghost:hover { background: #eceef5; color: #151726; } .ds-btn-ghost-danger { color: #b42318; } .ds-btn-ghost-danger:hover { background: #fdeeee; color: #911b12; } .ds-btn-ghost:focus-visible { outline: 2px solid #1f33c9; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Label above, hairline stroke, ink focus ring; coral stroke and dot while unsaved.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field-label\">Full name</label><input class=\"ds-field-input\" placeholder=\"Andrea Reyes\"></div><div class=\"ds-field ds-dirty\"><label class=\"ds-field-label\">Headline<span class=\"ds-dot\"></span></label><input class=\"ds-field-input\" value=\"IT student\"></div>",
+      "css": ".ds-field { margin-bottom: 16px; font-family: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif; } .ds-field-label { display: flex; align-items: center; margin-bottom: 6px; font-size: 0.875rem; font-weight: 600; color: #232637; } .ds-field-input { display: block; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #bfc3d3; background: #fff; padding: 10px 12px; font: inherit; font-size: 0.9375rem; color: #151726; caret-color: #1f33c9; transition: border-color 150ms, box-shadow 150ms; } .ds-field-input::placeholder { color: #9398ae; } .ds-field-input:hover { border-color: #9398ae; } .ds-field-input:focus { outline: none; border-color: #1f33c9; box-shadow: 0 0 0 3px #e2e5fb; } .ds-dirty .ds-field-input { border-color: #ff5a36; } .ds-dot { display: inline-block; width: 7px; height: 7px; margin-left: 8px; border-radius: 999px; background: #ff5a36; }"
+    },
+    {
+      "name": "Ink Rail",
+      "kind": "nav",
+      "refersTo": "rail-nav-item",
+      "description": "The ultramarine side rail with idle, hover and active items and a spec-captioned group.",
+      "html": "<nav class=\"ds-rail\"><a class=\"ds-rail-item ds-active\" href=\"#\">Manage portfolios</a><a class=\"ds-rail-item\" href=\"#\">New portfolio</a><p class=\"ds-spec\">Your portfolios</p><a class=\"ds-rail-item ds-small\" href=\"#\">Internship application</a></nav>",
+      "css": ".ds-rail { width: 232px; background: #1f33c9; padding: 12px; font-family: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif; display: flex; flex-direction: column; gap: 2px; } .ds-rail-item { display: block; border-radius: 4px; padding: 8px 12px; font-size: 0.9375rem; font-weight: 500; color: #e2e5fb; text-decoration: none; transition: background-color 150ms, color 150ms; } .ds-rail-item:hover { background: #1828a6; color: #fff; } .ds-rail-item.ds-active { background: #121f80; color: #fff; } .ds-rail-item.ds-small { font-size: 0.875rem; padding: 6px 12px; } .ds-rail-item:focus-visible { outline: 2px solid #fff; outline-offset: 2px; } .ds-spec { margin: 24px 12px 8px; font-stretch: 125%; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.3; color: #c6ccf6; }"
+    },
+    {
+      "name": "Status Chips",
+      "kind": "chip",
+      "refersTo": "chip-generated",
+      "description": "Pill status chips: Generated (green) and Draft (neutral).",
+      "html": "<span class=\"ds-chip ds-chip-go\">Generated</span> <span class=\"ds-chip ds-chip-draft\">Draft</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; border-radius: 9999px; padding: 4px 10px; font-family: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 600; } .ds-chip-go { background: #eaf7f0; color: #0d6e48; } .ds-chip-draft { background: #eceef5; color: #4c5168; }"
+    },
+    {
+      "name": "Portfolio Card",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Hairline panel with a tray holding the live sheet, title, spec caption and completeness segments.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-tray\"><div class=\"ds-sheet\"></div></div><div class=\"ds-card-body\"><h3 class=\"ds-card-title\">Internship application</h3><p class=\"ds-card-meta\">Andrea Reyes · IT student</p><p class=\"ds-spec\">Simple template · edited 8 minutes ago</p><div class=\"ds-segs\"><i style=\"--w:100%\" class=\"ds-done\"></i><i style=\"--w:60%\"></i><i style=\"--w:100%\" class=\"ds-done\"></i><i style=\"--w:20%\"></i><i style=\"--w:0%\"></i><i style=\"--w:0%\"></i></div></div></article>",
+      "css": ".ds-card { width: 340px; border: 1px solid #dadde8; border-radius: 4px; background: #fff; font-family: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif; } .ds-tray { background: #eceef5; border-bottom: 1px solid #dadde8; padding: 24px 24px 0; border-radius: 4px 4px 0 0; } .ds-sheet { aspect-ratio: 16 / 10; background: #fff; border-radius: 2px 2px 0 0; box-shadow: 0 0 0 1px rgb(13 15 26 / 0.06), 0 18px 32px -20px rgb(10 17 69 / 0.45); transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-card:hover .ds-sheet { transform: translateY(-4px); } .ds-card-body { padding: 20px; } .ds-card-title { margin: 0; font-stretch: 112%; font-size: 1.125rem; font-weight: 700; color: #0d0f1a; } .ds-card-meta { margin: 2px 0 0; font-size: 0.875rem; color: #4c5168; } .ds-spec { margin: 12px 0 16px; font-stretch: 125%; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #646982; } .ds-segs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; } .ds-segs i { display: block; height: 6px; border-radius: 9999px; background: linear-gradient(#1f33c9, #1f33c9) left / var(--w) 100% no-repeat, #dadde8; } .ds-segs i.ds-done { background: #16a06a; }"
+    },
+    {
+      "name": "Applications Spread",
+      "kind": "custom",
+      "refersTo": "sheet",
+      "description": "Signature: template sheets side by side on the ink plate, captioned below; the chosen one framed in white.",
+      "html": "<div class=\"ds-spread\"><figure class=\"ds-app ds-chosen\"><div class=\"ds-frame\"><div class=\"ds-sheet\"></div></div><figcaption><span class=\"ds-name\">Modern</span><span class=\"ds-spec\">Template 02 · Sora</span></figcaption></figure><figure class=\"ds-app\"><div class=\"ds-frame\"><div class=\"ds-sheet\"></div></div><figcaption><span class=\"ds-name\">Creative</span><span class=\"ds-spec\">Template 03 · Unbounded + Karla</span></figcaption></figure></div>",
+      "css": ".ds-spread { display: grid; grid-template-columns: repeat(2, 200px); gap: 24px; background: #1f33c9; padding: 32px; font-family: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif; } .ds-app { margin: 0; cursor: pointer; } .ds-frame { padding: 6px; border-radius: 3px; outline: 3px solid transparent; transition: outline-color 200ms, transform 200ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-app:not(.ds-chosen):hover .ds-frame { transform: translateY(-4px); } .ds-chosen .ds-frame { outline-color: #fff; } .ds-sheet { aspect-ratio: 3 / 4; background: #fff; border-radius: 2px; box-shadow: 0 0 0 1px rgb(13 15 26 / 0.06), 0 18px 32px -20px rgb(10 17 69 / 0.45); } figcaption { margin-top: 16px; display: flex; flex-direction: column; gap: 4px; color: #fff; } .ds-name { font-stretch: 125%; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; } .ds-spec { font-stretch: 125%; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #c6ccf6; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Identity Program",
+    "overview": "Folio is the manual for a personal identity. A corporate identity program has three things: a single solid colour plate, card stock that the applications are printed on, and a labelling voice that names each application precisely. Folio's app shell is built from exactly those. Ultramarine ink is the plate (the side rail, the applications spread, the closing call to action, every primary action). Cool white card stock is the ground. An extended grotesk sets headings and the tracked spec captions that label each application (\"Template 02 · Sora\"). The user's own content, rendered live in three templates, is the artwork the manual exists to show.\n\nDensity is calm but working: a 256px ink rail, a 12-column content armature, hairline rules instead of boxes wherever a rule will do. Corners are square-ish. Depth is reserved for paper: the scaled template sheets are the only objects that lie on the table and cast a shadow. The build rejects the generic indigo SaaS card dashboard. Ink is a solid flat plate, not a gradient, not a glow.\n\nState has its own small vocabulary that never overlaps the brand: coral for unsaved, green for saved and complete, danger red for destruction.",
+    "keyCharacteristics": [
+      "One solid ultramarine plate (ink-500) carrying navigation and primary action.",
+      "One neutral ramp (n-0 to n-950), tinted toward the ink, for every grey.",
+      "Archivo on its width axis: extended for identity, normal width for UI and reading.",
+      "Hairline rules and 4px corners; only paper sheets cast a shadow.",
+      "Live, scaled template sheets as the signature object.",
+      "Coral means unsaved. Nothing else is coral."
+    ],
+    "rules": [
+      { "name": "The One Plate Rule", "body": "Ink is applied as a flat, full-strength plate (ink-500) or as text and rules on that plate. No gradients, no glows. The pale ink-50 tint is limited to small notice strips and empty-state placeholder sheets, never a section or page wash.", "section": "colors" },
+      { "name": "The Coral Means Unsaved Rule", "body": "Coral marks changed, unsaved form state and nothing else: not links, not badges, not emphasis, not decoration.", "section": "colors" },
+      { "name": "The One Ramp Rule", "body": "Every grey comes from the n-* ramp. No stock Tailwind gray, slate, or zinc in the app shell.", "section": "colors" },
+      { "name": "The Width Is the Voice Rule", "body": "Extended width is for identity: headings, the wordmark, template names, spec captions, flow numerals. Buttons, fields, navigation and paragraphs stay at normal width.", "section": "typography" },
+      { "name": "The Spec Sits Beside Rule", "body": "A spec caption sits beside or below the thing it names (a sheet, a card, a list entry), never as an eyebrow above a heading.", "section": "typography" },
+      { "name": "The Twelve-Column Armature Rule", "body": "Every content region lays out on the 12-column grid; nothing floats at an arbitrary width except reading measures capped in ch.", "section": "layout" },
+      { "name": "The Only Sheets Cast Shadows Rule", "body": "A paper sheet is the only element with a shadow. Raise state with a ground change, a white outline (the chosen template), or a 4px lift, not with a blur.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do put navigation and primary action on the ink-500 plate, flat and full strength.",
+      "Do take every grey from the n-* ramp and every corner from 2px (sheets), 3px (nested segments) or 4px (chrome).",
+      "Do set headings, template names and spec captions in extended Archivo; keep UI and reading text at normal width.",
+      "Do show completeness as six exact-length segments, ink while partial and green when complete.",
+      "Do use coral only for unsaved changes, and clear it when the form saves.",
+      "Do let template sheets carry the one sheet shadow and lift 4px on hover with cubic-bezier(0.16, 1, 0.3, 1)."
+    ],
+    "donts": [
+      "Don't put gradients, glows, or tinted washes on the ink plate.",
+      "Don't use coral for links, emphasis, badges or decoration.",
+      "Don't give chrome (buttons, panels, bars, dialogs, toggles) a blur shadow; only paper sheets cast one.",
+      "Don't place a spec caption as an eyebrow above a heading.",
+      "Don't round containers or buttons into pills; pills are for chips, segments, dots and the check badge.",
+      "Don't pull the portfolio templates' faces or colours into the app shell."
+    ]
+  }
+}
