@@ -211,6 +211,58 @@ class PortfolioController extends Controller
         return $this->portfolioView($portfolio, $portfolio->template, embedded: false);
     }
 
+    // ── Sharing ─────────────────────────────────────────────────────────────
+
+    /** Turn the public link on or off, and optionally change its address. */
+    public function share(Request $request, Portfolio $portfolio): RedirectResponse
+    {
+        Gate::authorize('manage', $portfolio);
+
+        $request->merge(['slug' => Str::slug((string) $request->input('slug'))]);
+
+        $data = $request->validate([
+            'is_public' => ['required', 'boolean'],
+            'slug' => ['nullable', 'string', 'min:3', 'max:80', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+                Rule::unique('portfolios', 'slug')->ignore($portfolio->id)],
+        ], [
+            'slug.unique' => 'That link is already taken. Try adding a number or your middle name.',
+            'slug.min' => 'Use at least 3 characters for the link.',
+        ]);
+
+        $public = (bool) $data['is_public'];
+
+        if ($public && ! $portfolio->generated_at) {
+            return back()->withErrors(['share' => 'Generate your portfolio first, then you can share it.']);
+        }
+
+        $portfolio->update([
+            'is_public' => $public,
+            'slug' => $data['slug'] ?: ($portfolio->slug ?: Portfolio::uniqueSlug($portfolio->full_name, $portfolio->id)),
+        ]);
+
+        return back()->with('status', $public
+            ? 'Sharing is on. Anyone with the link can view this portfolio.'
+            : 'Sharing is off. The public link no longer works.');
+    }
+
+    /** The public, read-only portfolio page. No login needed. */
+    public function showPublic(string $slug): View
+    {
+        $portfolio = Portfolio::where('slug', $slug)
+            ->where('is_public', true)
+            ->whereNotNull('generated_at')
+            ->firstOrFail();
+
+        $portfolio->load(['educations', 'skills', 'projects', 'experiences', 'links']);
+
+        return view('templates.'.$portfolio->template, [
+            'p' => $portfolio,
+            'embedded' => false,
+            'owner' => false,
+            'public' => true,
+        ]);
+    }
+
     // ── Delete ──────────────────────────────────────────────────────────────
 
     public function destroy(Portfolio $portfolio): RedirectResponse

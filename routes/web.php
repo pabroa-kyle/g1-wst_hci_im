@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/samples/{template}', [HomeController::class, 'sample'])->name('samples.show');
+Route::get('/p/{slug}', [PortfolioController::class, 'showPublic'])->name('portfolios.public')
+    ->where('slug', '[a-z0-9-]+');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -33,6 +35,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/portfolios/{portfolio}/template', [PortfolioController::class, 'chooseTemplate'])->name('portfolios.template');
     Route::post('/portfolios/{portfolio}/generate', [PortfolioController::class, 'generate'])->name('portfolios.generate');
+    Route::put('/portfolios/{portfolio}/share', [PortfolioController::class, 'share'])->name('portfolios.share');
     Route::get('/portfolios/{portfolio}/preview', [PortfolioController::class, 'preview'])->name('portfolios.preview');
     Route::get('/portfolios/{portfolio}/render', [PortfolioController::class, 'render'])->name('portfolios.render');
 });

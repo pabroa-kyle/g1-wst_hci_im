@@ -146,6 +146,50 @@ class PortfolioFlowTest extends TestCase
         $this->assertDatabaseHas('portfolios', ['id' => $portfolio->id]);
     }
 
+    public function test_sharing_a_portfolio_publicly(): void
+    {
+        $owner = User::factory()->create();
+        $portfolio = $owner->portfolios()->create(['title' => 'Mine', 'full_name' => 'Juan Dela Cruz', 'template' => 'modern']);
+        $this->actingAs($owner);
+
+        // Can't share before generating
+        $this->put(route('portfolios.share', $portfolio), ['is_public' => 1])->assertSessionHasErrors('share');
+        $this->assertFalse($portfolio->fresh()->is_public);
+
+        // Generate, then share: a slug is created from the name
+        $this->post(route('portfolios.generate', $portfolio), ['template' => 'creative']);
+        $this->put(route('portfolios.share', $portfolio), ['is_public' => 1])->assertSessionHasNoErrors();
+        $portfolio->refresh();
+        $this->assertTrue($portfolio->isShared());
+        $this->assertSame('juan-dela-cruz', $portfolio->slug);
+        $this->get(route('portfolios.preview', $portfolio))->assertOk()->assertSee('/p/juan-dela-cruz');
+
+        // A guest can view it, read-only
+        auth()->logout();
+        $this->get('/p/juan-dela-cruz')->assertOk()->assertSee('Juan')->assertDontSee('Back to Folio');
+
+        // A second person with the same name gets a numbered slug
+        $other = User::factory()->create()->portfolios()->create(['title' => 'X', 'full_name' => 'Juan Dela Cruz']);
+        $this->assertSame('juan-dela-cruz-2', \App\Models\Portfolio::uniqueSlug('Juan Dela Cruz', $other->id));
+
+        // Changing the link: taken slugs are rejected, new ones work
+        $this->actingAs($owner);
+        $other->update(['slug' => 'taken-link']);
+        $this->put(route('portfolios.share', $portfolio), ['is_public' => 1, 'slug' => 'taken-link'])->assertSessionHasErrors('slug');
+        $this->put(route('portfolios.share', $portfolio), ['is_public' => 1, 'slug' => 'Juan DC Portfolio'])->assertSessionHasNoErrors();
+        $this->assertSame('juan-dc-portfolio', $portfolio->fresh()->slug);
+        $this->get('/p/juan-dela-cruz')->assertNotFound();
+
+        // Turning it off makes the link stop working
+        $this->put(route('portfolios.share', $portfolio), ['is_public' => 0]);
+        auth()->logout();
+        $this->get('/p/juan-dc-portfolio')->assertNotFound();
+
+        // Nobody else can change sharing
+        $this->actingAs(User::factory()->create());
+        $this->put(route('portfolios.share', $portfolio), ['is_public' => 1])->assertForbidden();
+    }
+
     public function test_guests_are_sent_to_login(): void
     {
         $this->get('/dashboard')->assertRedirect('/login');

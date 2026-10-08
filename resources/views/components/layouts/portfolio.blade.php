@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $p->full_name }}{{ $p->headline ? ' · '.$p->headline : '' }}</title>
     <meta name="description" content="{{ \Illuminate\Support\Str::limit($p->about ?: $p->full_name.' portfolio', 155) }}">
-    <meta name="robots" content="noindex">
+    @unless (request()->routeIs('portfolios.public'))
+        <meta name="robots" content="noindex">
+    @endunless
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     @vite('resources/css/portfolio.css')
 </head>

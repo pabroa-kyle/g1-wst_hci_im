@@ -76,7 +76,9 @@
                                     </h2>
                                     <p class="mt-0.5 truncate text-sm text-n-600">{{ $portfolio->full_name }}@if($portfolio->headline) · {{ $portfolio->headline }}@endif</p>
                                 </div>
-                                @if ($portfolio->generated_at)
+                                @if ($portfolio->isShared())
+                                    <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-go-50 px-2.5 py-1 text-xs font-semibold text-go-700"><x-lucide-link class="size-3.5" /> Shared</span>
+                                @elseif ($portfolio->generated_at)
                                     <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-go-50 px-2.5 py-1 text-xs font-semibold text-go-700"><x-lucide-check class="size-3.5" /> Generated</span>
                                 @else
                                     <span class="inline-flex shrink-0 items-center rounded-full bg-n-100 px-2.5 py-1 text-xs font-semibold text-n-600">Draft</span>
@@ -84,6 +86,23 @@
                             </div>
 
                             <p class="spec mt-3 text-n-500">{{ $portfolio->templateName() }} template · edited {{ $portfolio->updated_at->diffForHumans() }}</p>
+
+                            @if ($portfolio->isShared())
+                                <div class="mt-3 flex items-center gap-1 rounded-(--radius-ui) bg-n-50 py-1 pr-1 pl-2.5 ring-1 ring-n-200" x-data="{ copied: false }">
+                                    <x-lucide-link class="size-3.5 shrink-0 text-go-700" aria-hidden="true" />
+                                    <a href="{{ $portfolio->publicUrl() }}" target="_blank" rel="noopener" class="min-w-0 flex-1 truncate text-[0.8125rem] font-medium text-ink-600 hover:underline">{{ preg_replace('#^https?://#', '', $portfolio->publicUrl()) }}</a>
+                                    <button type="button" class="btn btn-ghost btn-sm shrink-0 px-2 text-xs"
+                                            @click="navigator.clipboard.writeText(@js($portfolio->publicUrl())); copied = true; setTimeout(() => copied = false, 2000)"
+                                            :aria-label="copied ? 'Link copied' : 'Copy public link'">
+                                        <x-lucide-copy x-show="!copied" /><x-lucide-check x-show="copied" x-cloak class="text-go-700" />
+                                        <span x-text="copied ? 'Copied' : 'Copy'">Copy</span>
+                                    </button>
+                                </div>
+                            @elseif ($portfolio->generated_at)
+                                <a href="{{ route('portfolios.preview', $portfolio) }}#share" class="mt-3 inline-flex items-center gap-1.5 text-[0.8125rem] font-medium text-n-600 hover:text-ink-600 hover:underline">
+                                    <x-lucide-link class="size-3.5" /> Not shared · Share this portfolio
+                                </a>
+                            @endif
 
                             <div class="mt-4">
                                 <div class="mb-2 flex items-baseline justify-between text-sm">

@@ -44,11 +44,36 @@ class Portfolio extends Model
 
     protected $fillable = [
         'title', 'template', 'full_name', 'headline', 'email', 'phone', 'address', 'about', 'photo_path', 'generated_at',
+        'slug', 'is_public',
     ];
 
     protected function casts(): array
     {
-        return ['generated_at' => 'datetime'];
+        return ['generated_at' => 'datetime', 'is_public' => 'boolean'];
+    }
+
+    /** Shared publicly: switched on and generated at least once. */
+    public function isShared(): bool
+    {
+        return $this->is_public && $this->generated_at !== null && filled($this->slug);
+    }
+
+    public function publicUrl(): ?string
+    {
+        return filled($this->slug) ? route('portfolios.public', $this->slug) : null;
+    }
+
+    /** A unique slug from the person's name, e.g. "andrea-reyes" or "andrea-reyes-2". */
+    public static function uniqueSlug(string $source, ?int $ignoreId = null): string
+    {
+        $base = Str::limit(Str::slug($source), 70, '') ?: 'portfolio';
+        $slug = $base;
+
+        for ($i = 2; static::where('slug', $slug)->when($ignoreId, fn ($q) => $q->whereKeyNot($ignoreId))->exists(); $i++) {
+            $slug = $base.'-'.$i;
+        }
+
+        return $slug;
     }
 
     public function user(): BelongsTo

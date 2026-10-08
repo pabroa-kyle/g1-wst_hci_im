@@ -50,6 +50,8 @@
             </div>
         </div>
 
+        <x-share-panel :portfolio="$portfolio" />
+
         @if (! $isSaved || ! $portfolio->generated_at)
             <form method="POST" action="{{ route('portfolios.generate', $portfolio) }}"
                   class="flex flex-col gap-3 border-b border-ink-200 bg-ink-50 px-4 py-3 text-sm text-ink-800 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-10">
