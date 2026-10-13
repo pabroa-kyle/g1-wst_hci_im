@@ -30,8 +30,8 @@
             </div>
 
             <div class="mt-10 flex items-end justify-between gap-6">
-                <ul class="space-y-1 text-[0.9375rem] font-semibold">
-                    @if ($p->email)<li><a href="mailto:{{ $p->email }}" class="group inline-flex items-center gap-2 hover:underline"><x-lucide-arrow-right class="size-4 -rotate-45 transition-transform group-hover:rotate-0" />{{ $p->email }}</a></li>@endif
+                <ul class="min-w-0 space-y-1 text-[0.9375rem] font-semibold">
+                    @if ($p->email)<li class="min-w-0"><a href="mailto:{{ $p->email }}" class="group inline-flex max-w-full items-center gap-2 hover:underline"><x-lucide-arrow-right class="size-4 shrink-0 -rotate-45 transition-transform group-hover:rotate-0" /><span class="min-w-0 break-all">{{ $p->email }}</span></a></li>@endif
                     @if ($p->phone)<li><a href="tel:{{ preg_replace('/[^0-9+]/', '', $p->phone) }}" class="group inline-flex items-center gap-2 hover:underline"><x-lucide-arrow-right class="size-4 -rotate-45 transition-transform group-hover:rotate-0" />{{ $p->phone }}</a></li>@endif
                 </ul>
                 <figure class="relative w-32 shrink-0 rotate-[5deg] border-[3px] border-[#111] bg-[#f7f6f2] p-1.5 pb-6 shadow-[8px_8px_0_#111] sm:w-40">

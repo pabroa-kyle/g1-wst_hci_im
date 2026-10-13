@@ -39,7 +39,7 @@
                     <p class="mt-6 max-w-[56ch] text-lg leading-relaxed text-white/70">{{ \Illuminate\Support\Str::limit(preg_split('/\n\s*\n/', trim($p->about))[0], 220) }}</p>
                 @endif
                 <ul class="mt-8 flex flex-wrap gap-2.5 text-sm">
-                    @if ($p->email)<li><a href="mailto:{{ $p->email }}" class="inline-flex items-center gap-2 rounded-xl bg-white/8 px-3.5 py-2 text-white/85 ring-1 ring-white/10 hover:bg-white/14"><x-lucide-mail class="size-4 text-[#5eead4]" />{{ $p->email }}</a></li>@endif
+                    @if ($p->email)<li><a href="mailto:{{ $p->email }}" class="inline-flex max-w-full items-center gap-2 rounded-xl bg-white/8 px-3.5 py-2 text-white/85 ring-1 ring-white/10 hover:bg-white/14"><x-lucide-mail class="size-4 shrink-0 text-[#5eead4]" /><span class="min-w-0 break-all">{{ $p->email }}</span></a></li>@endif
                     @if ($p->phone)<li><a href="tel:{{ preg_replace('/[^0-9+]/', '', $p->phone) }}" class="inline-flex items-center gap-2 rounded-xl bg-white/8 px-3.5 py-2 text-white/85 ring-1 ring-white/10 hover:bg-white/14"><x-lucide-phone class="size-4 text-[#5eead4]" />{{ $p->phone }}</a></li>@endif
                     @if ($p->address)<li class="inline-flex items-center gap-2 rounded-xl bg-white/8 px-3.5 py-2 text-white/85 ring-1 ring-white/10"><x-lucide-map-pin class="size-4 text-[#5eead4]" />{{ $p->address }}</li>@endif
                 </ul>
@@ -160,12 +160,12 @@
             @endif
         </div>
 
-        <section id="contact" class="mt-16 scroll-mt-24 overflow-hidden rounded-3xl bg-[#0b1220] p-8 text-white md:p-12">
-            <div class="grid gap-10 md:grid-cols-2 md:items-end">
+        <section id="contact" class="mt-16 scroll-mt-24 overflow-hidden rounded-3xl bg-[#0b1220] p-6 text-white sm:p-8 md:p-12">
+            <div class="grid gap-10 md:grid-cols-2 md:items-end [&>*]:min-w-0">
                 <div>
                     <h2 class="text-[clamp(2rem,4vw,3rem)] leading-[1.05] font-semibold tracking-[-0.035em]">Let’s work together.</h2>
                     @if ($p->email)
-                        <a href="mailto:{{ $p->email }}" class="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#2dd4bf] px-5 py-3 font-semibold text-[#0b1220] hover:bg-[#5eead4]"><x-lucide-mail class="size-4" /> {{ $p->email }}</a>
+                        <a href="mailto:{{ $p->email }}" class="mt-6 inline-flex max-w-full items-center gap-2 rounded-xl bg-[#2dd4bf] px-5 py-3 font-semibold text-[#0b1220] hover:bg-[#5eead4]"><x-lucide-mail class="size-4 shrink-0" /> <span class="min-w-0 break-all">{{ $p->email }}</span></a>
                     @endif
                 </div>
                 @if ($p->links->isNotEmpty())

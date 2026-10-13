@@ -14,7 +14,7 @@
                 @endif
                 @if ($contact)
                     <ul class="mt-6 flex flex-wrap gap-x-5 gap-y-1.5 text-[0.9375rem] text-[#4a4a55]">
-                        @if ($p->email)<li><a href="mailto:{{ $p->email }}" class="hover:text-[#1d3a6b] hover:underline">{{ $p->email }}</a></li>@endif
+                        @if ($p->email)<li class="min-w-0 break-all"><a href="mailto:{{ $p->email }}" class="hover:text-[#1d3a6b] hover:underline">{{ $p->email }}</a></li>@endif
                         @if ($p->phone)<li><a href="tel:{{ preg_replace('/[^0-9+]/', '', $p->phone) }}" class="hover:text-[#1d3a6b] hover:underline">{{ $p->phone }}</a></li>@endif
                         @if ($p->address)<li>{{ $p->address }}</li>@endif
                     </ul>
