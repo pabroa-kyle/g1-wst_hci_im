@@ -1,4 +1,4 @@
-@props(['label', 'field', 'type' => 'text', 'optional' => false, 'placeholder' => '', 'max' => 255, 'multiline' => false, 'help' => null])
+@props(['label', 'field', 'type' => 'text', 'optional' => false, 'placeholder' => '', 'max' => 255, 'multiline' => false, 'help' => null, 'lettersOnly' => false])
 {{-- A field inside a repeater row (rendered within an Alpine x-for). --}}
 <div data-field {{ $attributes }}>
     <label class="field-label" :for="`{{ $field }}-${row._k}`">
@@ -12,7 +12,11 @@
     @else
         <input type="{{ $type }}" class="field-input" maxlength="{{ $max }}" placeholder="{{ $placeholder }}"
                :id="`{{ $field }}-${row._k}`" :name="`items[${i}][{{ $field }}]`" x-model="row.{{ $field }}"
-               :aria-invalid="error(i, '{{ $field }}') ? 'true' : 'false'">
+               :aria-invalid="error(i, '{{ $field }}') ? 'true' : 'false'"
+               @if ($lettersOnly) data-letters-only @endif>
+    @endif
+    @if ($lettersOnly)
+        <p class="field-help font-medium text-ink-600" data-letters-hint hidden role="status">Letters and spaces only. Numbers and special characters aren’t allowed.</p>
     @endif
     <p class="field-error" x-show="error(i, '{{ $field }}')" x-cloak>
         <x-lucide-circle-alert class="size-3.5 shrink-0" /> <span x-text="error(i, '{{ $field }}')"></span>

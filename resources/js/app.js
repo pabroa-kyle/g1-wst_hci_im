@@ -160,5 +160,33 @@ async function downscale(file, max) {
     }
 }
 
+/**
+ * Fields marked data-letters-only accept letters (any language) and spaces
+ * only. Numbers and special characters are removed as they are typed or
+ * pasted. Runs in the capture phase so Alpine's x-model sees the clean value.
+ * The server applies the same rule.
+ */
+const NOT_LETTER = /[^\p{L}\s]/gu;
+document.addEventListener('input', (event) => {
+    const field = event.target;
+    if (!field.matches?.('[data-letters-only]')) return;
+    const value = field.value;
+    const cleaned = value.replace(NOT_LETTER, '');
+    if (cleaned === value) return;
+
+    const caret = field.selectionStart ?? cleaned.length;
+    const removedBeforeCaret = value.slice(0, caret).length - value.slice(0, caret).replace(NOT_LETTER, '').length;
+    field.value = cleaned;
+    field.setSelectionRange?.(caret - removedBeforeCaret, caret - removedBeforeCaret);
+
+    const wrapper = field.closest('[data-field]');
+    const hint = wrapper?.querySelector('[data-letters-hint]');
+    if (hint) {
+        hint.hidden = false;
+        clearTimeout(hint._timer);
+        hint._timer = setTimeout(() => (hint.hidden = true), 2500);
+    }
+}, true);
+
 window.Alpine = Alpine;
 Alpine.start();

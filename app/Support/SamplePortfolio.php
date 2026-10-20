@@ -20,7 +20,7 @@ class SamplePortfolio
         return [
             'title' => 'Sample portfolio',
             'full_name' => 'Andrea Reyes',
-            'headline' => 'Front-end developer & UI designer',
+            'headline' => 'Frontend developer and UI designer',
             'email' => 'andrea.reyes@example.com',
             'phone' => '+63 917 555 0142',
             'address' => 'Quezon City, Metro Manila',

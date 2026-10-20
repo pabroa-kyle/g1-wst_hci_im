@@ -114,14 +114,39 @@
                                 <x-segments :portfolio="$portfolio" />
                             </div>
 
-                            <div class="mt-5 grid grid-cols-4 gap-1 border-t sm:flex sm:items-center border-n-200 pt-4">
-                                <a href="{{ route('portfolios.preview', $portfolio) }}" class="btn btn-ghost btn-sm max-sm:flex-col max-sm:gap-1 max-sm:px-1 max-sm:text-xs"><x-lucide-eye /> View</a>
-                                <a href="{{ route('portfolios.edit', $portfolio) }}" class="btn btn-ghost btn-sm max-sm:flex-col max-sm:gap-1 max-sm:px-1 max-sm:text-xs"><x-lucide-pencil /> Edit</a>
-                                <a href="{{ route('portfolios.template', $portfolio) }}" class="btn btn-ghost btn-sm max-sm:flex-col max-sm:gap-1 max-sm:px-1 max-sm:text-xs"><x-lucide-palette /> Template</a>
-                                <button type="button" class="btn btn-ghost btn-sm max-sm:flex-col max-sm:gap-1 max-sm:px-1 max-sm:text-xs sm:ml-auto text-danger-600 hover:bg-danger-50 hover:text-danger-700"
-                                        onclick="document.getElementById('delete-{{ $portfolio->id }}').showModal()">
-                                    <x-lucide-trash-2 /> Delete
-                                </button>
+                            <div class="mt-5 flex items-center justify-between gap-2 border-t border-n-200 pt-4">
+                                <a href="{{ route('portfolios.preview', $portfolio) }}" class="btn btn-ghost btn-sm"><x-lucide-eye /> View</a>
+
+                                {{-- Edit / Template / Delete live in a menu to keep the card calm and avoid accidental clicks --}}
+                                <div class="relative" x-data="{ open: false }"
+                                     @keydown.escape.window="if (open) { open = false; $refs.toggle.focus() }"
+                                     @click.outside="open = false">
+                                    <button type="button" x-ref="toggle" class="btn btn-ghost btn-sm"
+                                            @click="open = !open; if (open) $nextTick(() => $refs.menu.querySelector('[role=menuitem]').focus())"
+                                            :aria-expanded="open" aria-haspopup="menu" aria-controls="actions-{{ $portfolio->id }}"
+                                            aria-label="More actions for {{ $portfolio->title }}">
+                                        <x-lucide-menu /> <span class="text-sm">Options</span>
+                                    </button>
+                                    <div id="actions-{{ $portfolio->id }}" x-ref="menu" role="menu" x-show="open" x-cloak
+                                         x-transition:enter="transition duration-150 ease-(--ease-out-expo)" x-transition:enter-start="opacity-0 translate-y-1"
+                                         x-transition:leave="transition duration-100" x-transition:leave-end="opacity-0"
+                                         class="absolute right-0 bottom-full z-20 mb-2 w-48 rounded-(--radius-ui) border border-n-200 bg-white p-1 shadow-[0_12px_28px_-12px_rgb(10_17_69/0.35)]">
+                                        <a href="{{ route('portfolios.edit', $portfolio) }}" role="menuitem"
+                                           class="flex items-center gap-2.5 rounded-[3px] px-3 py-2 text-sm font-medium text-n-800 hover:bg-n-100 focus:bg-n-100 focus:outline-none">
+                                            <x-lucide-pencil class="size-4 text-n-500" /> Edit
+                                        </a>
+                                        <a href="{{ route('portfolios.template', $portfolio) }}" role="menuitem"
+                                           class="flex items-center gap-2.5 rounded-[3px] px-3 py-2 text-sm font-medium text-n-800 hover:bg-n-100 focus:bg-n-100 focus:outline-none">
+                                            <x-lucide-palette class="size-4 text-n-500" /> Change template
+                                        </a>
+                                        <div class="my-1 border-t border-n-200" role="separator"></div>
+                                        <button type="button" role="menuitem"
+                                                class="flex w-full items-center gap-2.5 rounded-[3px] px-3 py-2 text-sm font-medium text-danger-600 hover:bg-danger-50 focus:bg-danger-50 focus:outline-none"
+                                                @click="open = false; document.getElementById('delete-{{ $portfolio->id }}').showModal()">
+                                            <x-lucide-trash-2 class="size-4" /> Delete
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <x-delete-dialog :portfolio="$portfolio" />

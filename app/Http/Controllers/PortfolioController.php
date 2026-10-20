@@ -24,7 +24,7 @@ class PortfolioController extends Controller
         'education' => [
             'relation' => 'educations',
             'rules' => [
-                'school' => ['required', 'string', 'max:160'],
+                'school' => ['required', 'string', 'max:160', self::LETTERS_ONLY],
                 'degree' => ['nullable', 'string', 'max:160'],
                 'start_year' => ['nullable', 'string', 'max:10'],
                 'end_year' => ['nullable', 'string', 'max:10'],
@@ -69,6 +69,9 @@ class PortfolioController extends Controller
             ],
         ],
     ];
+
+    /** Letters (any language, e.g. ñ, é) and spaces only: no numbers or special characters. */
+    private const LETTERS_ONLY = 'regex:/^[\pL\s]+$/u';
 
     /** Fields that are filled automatically and don't make a row "non-empty". */
     private const DEFAULTED_FIELDS = ['level', 'is_current'];
@@ -295,10 +298,17 @@ class PortfolioController extends Controller
 
     private function validatePersonal(Request $request): array
     {
+        // Collapse repeated spaces (e.g. left behind after removing a character).
+        foreach (['title', 'full_name', 'headline'] as $field) {
+            if (is_string($request->input($field))) {
+                $request->merge([$field => Str::squish($request->input($field))]);
+            }
+        }
+
         return $request->validate([
-            'title' => ['required', 'string', 'max:120'],
-            'full_name' => ['required', 'string', 'max:120'],
-            'headline' => ['nullable', 'string', 'max:160'],
+            'title' => ['required', 'string', 'max:120', self::LETTERS_ONLY],
+            'full_name' => ['required', 'string', 'max:120', self::LETTERS_ONLY],
+            'headline' => ['nullable', 'string', 'max:160', self::LETTERS_ONLY],
             'email' => ['nullable', 'email', 'max:160'],
             'phone' => ['nullable', 'string', 'max:40', 'regex:/^[0-9+()\-.\s]{6,40}$/'],
             'address' => ['nullable', 'string', 'max:255'],
@@ -308,6 +318,9 @@ class PortfolioController extends Controller
         ], [
             'title.required' => 'Give this portfolio a name, e.g. “Web developer portfolio”.',
             'full_name.required' => 'Enter your full name.',
+            'title.regex' => 'The portfolio name can only contain letters and spaces.',
+            'full_name.regex' => 'Your full name can only contain letters and spaces.',
+            'headline.regex' => 'The headline can only contain letters and spaces.',
             'phone.regex' => 'Use digits, spaces, and + ( ) - only.',
             'photo.max' => 'That photo is over 5 MB. Choose a smaller image.',
             'photo.image' => 'The profile picture must be a JPG, PNG, or WebP image.',
@@ -329,6 +342,9 @@ class PortfolioController extends Controller
                         $row[$field] = 'https://'.ltrim($row[$field], '/');
                     }
                 }
+                if (is_string($row['school'] ?? null)) {
+                    $row['school'] = Str::squish($row['school']);
+                }
                 if (array_key_exists('is_current', $row)) {
                     $row['is_current'] = (bool) $row['is_current'];
                 }
@@ -348,6 +364,7 @@ class PortfolioController extends Controller
 
         $validated = $request->validate($rules, [
             'items.*.*.required' => 'This field is required.',
+            'items.*.school.regex' => 'The school name can only contain letters and spaces.',
             'items.*.url.url' => 'Enter a full web address, e.g. https://github.com/you.',
         ]);
 

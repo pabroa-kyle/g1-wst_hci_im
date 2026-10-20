@@ -48,12 +48,29 @@
                         <p class="truncate text-sm font-semibold">{{ $user->name }}</p>
                         <p class="truncate text-[0.8125rem] text-ink-200">{{ $user->email }}</p>
                     </div>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="{{ $navItem }} {{ $navIdle }} w-full">
-                            <x-lucide-log-out class="size-[18px]" /> Log out
-                        </button>
-                    </form>
+                    <button type="button" class="{{ $navItem }} {{ $navIdle }} w-full"
+                            onclick="document.getElementById('logout-dialog').showModal()" aria-haspopup="dialog">
+                        <x-lucide-log-out class="size-[18px]" /> Log out
+                    </button>
+
+                    {{-- Confirm before logging out, so a stray click doesn't end the session. --}}
+                    <dialog id="logout-dialog" aria-labelledby="logout-title"
+                            class="m-auto w-[min(26rem,calc(100vw-2rem))] rounded-(--radius-ui) border border-n-200 bg-white p-0 text-n-900 shadow-[0_24px_48px_-16px_rgb(10_17_69/0.35)] backdrop:bg-n-950/50">
+                        <form method="POST" action="{{ route('logout') }}" class="p-6">
+                            @csrf
+                            <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-ink-50 text-ink-500">
+                                <x-lucide-log-out class="size-5" />
+                            </div>
+                            <h2 id="logout-title" class="font-semiwide text-lg font-bold">Log out of Folio?</h2>
+                            <p class="mt-2 text-sm leading-relaxed text-n-600">
+                                Your saved portfolios stay in your account. Anything you haven’t saved on this page will be lost.
+                            </p>
+                            <div class="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                                <button type="button" class="btn btn-secondary" onclick="this.closest('dialog').close()" autofocus>Stay logged in</button>
+                                <button type="submit" class="btn btn-primary"><x-lucide-log-out /> Log out</button>
+                            </div>
+                        </form>
+                    </dialog>
                 </div>
             </nav>
         </aside>

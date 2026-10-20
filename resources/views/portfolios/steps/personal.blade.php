@@ -7,8 +7,8 @@
             <h2 id="g-portfolio" class="font-semiwide text-base font-bold text-n-950">Portfolio</h2>
             <p class="mt-1 text-sm text-n-600">Only you see this name. It labels the portfolio on your dashboard.</p>
             <div class="mt-5">
-                <x-field label="Portfolio name" name="title" help="For example: “Web developer portfolio” or “Internship application”.">
-                    <input type="text" class="field-input" maxlength="120" required
+                <x-field label="Portfolio name" name="title" letters-only help="For example: “Web developer portfolio” or “Internship application”.">
+                    <input type="text" class="field-input" maxlength="120" required data-letters-only
                            @foreach ($input('title') as $k => $v) {{ $k }}="{{ $v }}" @endforeach
                            value="{{ old('title', $portfolio->title) }}" placeholder="My portfolio">
                 </x-field>
@@ -50,13 +50,13 @@
             </div>
 
             <div class="mt-6 grid gap-5 sm:grid-cols-2">
-                <x-field label="Full name" name="full_name">
-                    <input type="text" class="field-input" maxlength="120" autocomplete="name" required
+                <x-field label="Full name" name="full_name" letters-only>
+                    <input type="text" class="field-input" maxlength="120" autocomplete="name" required data-letters-only
                            @foreach ($input('full_name') as $k => $v) {{ $k }}="{{ $v }}" @endforeach
                            value="{{ old('full_name', $portfolio->full_name) }}">
                 </x-field>
-                <x-field label="Headline" name="headline" optional help="Your role or focus, e.g. “Front-end developer”.">
-                    <input type="text" class="field-input" maxlength="160"
+                <x-field label="Headline" name="headline" optional letters-only help="Your role or focus, e.g. “Frontend developer”.">
+                    <input type="text" class="field-input" maxlength="160" data-letters-only
                            @foreach ($input('headline') as $k => $v) {{ $k }}="{{ $v }}" @endforeach
                            value="{{ old('headline', $portfolio->headline) }}" placeholder="Aspiring software engineer">
                 </x-field>

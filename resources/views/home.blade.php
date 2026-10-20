@@ -1,7 +1,7 @@
 @use('App\Models\Portfolio')
 @php($createUrl = auth()->check() ? route('portfolios.create') : route('register'))
 <x-layouts.base body-class="bg-n-0">
-    <header class="border-b border-n-200">
+    <header class="sticky top-0 z-40 border-b border-n-200 bg-white/90 backdrop-blur-md supports-[backdrop-filter]:bg-white/80">
         <div class="mx-auto flex max-w-[90rem] items-center justify-between px-4 py-4 sm:px-6 lg:px-10">
             <a href="{{ route('home') }}" aria-label="Folio home"><x-logo /></a>
             <nav class="flex items-center gap-2" aria-label="Account">
@@ -25,12 +25,6 @@
                 <p class="max-w-[46ch] text-lg leading-relaxed text-n-700">
                     <strong class="font-semibold text-n-950">Folio</strong> is an online portfolio template generator. Add your details, education, skills, projects, and experience. Folio saves them to a cloud database. Then pick the Simple, Modern, or Creative template and generate your portfolio page.
                 </p>
-                <div class="mt-7 flex flex-wrap gap-3">
-                    <a href="{{ $createUrl }}" class="btn btn-primary btn-lg">Create portfolio <x-lucide-arrow-right /></a>
-                    @guest
-                        <a href="{{ route('login') }}" class="btn btn-secondary btn-lg">Log in</a>
-                    @endguest
-                </div>
             </div>
         </section>
 

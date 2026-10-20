@@ -190,6 +190,33 @@ class PortfolioFlowTest extends TestCase
         $this->put(route('portfolios.share', $portfolio), ['is_public' => 1])->assertForbidden();
     }
 
+    public function test_name_fields_accept_letters_and_spaces_only(): void
+    {
+        $this->actingAs(User::factory()->create());
+
+        // Numbers and special characters are rejected
+        $this->post('/portfolios', [
+            'title' => 'Portfolio 2026!',
+            'full_name' => 'Juan123',
+            'headline' => 'Dev & Designer',
+        ])->assertSessionHasErrors(['title', 'full_name', 'headline']);
+        $this->assertDatabaseCount('portfolios', 0);
+
+        // Letters (including ñ / é) and spaces are accepted
+        $this->post('/portfolios', [
+            'title' => 'My Portfolio',
+            'full_name' => 'José Niño Dela Cruz',
+            'headline' => 'Frontend developer',
+        ])->assertSessionHasNoErrors();
+        $portfolio = Portfolio::firstOrFail();
+
+        // School follows the same rule
+        $this->put(route('portfolios.update', [$portfolio, 'education']), ['items' => [['school' => 'NSU #1']]])
+            ->assertSessionHasErrors('items.0.school');
+        $this->put(route('portfolios.update', [$portfolio, 'education']), ['items' => [['school' => 'Northbridge State University']]])
+            ->assertSessionHasNoErrors();
+    }
+
     public function test_guests_are_sent_to_login(): void
     {
         $this->get('/dashboard')->assertRedirect('/login');

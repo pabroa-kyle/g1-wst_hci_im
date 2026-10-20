@@ -14,21 +14,22 @@
     $tileColors = ['bg-[#0f766e]', 'bg-[#4338ca]', 'bg-[#b45309]', 'bg-[#be185d]', 'bg-[#0369a1]', 'bg-[#4d7c0f]'];
 @endphp
 <x-layouts.portfolio :p="$p" :owner="$owner" body-class="bg-[#eef1f6] font-sora text-[#0b1220] selection:bg-[#2dd4bf] selection:text-[#0b1220]">
-    <div class="bg-[#0b1220] text-white">
-        <nav class="sticky top-0 z-40 border-b border-white/10 bg-[#0b1220]/85 backdrop-blur" aria-label="Sections">
-            <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
-                <a href="#top" class="flex size-9 items-center justify-center rounded-xl bg-[#2dd4bf] text-sm font-bold text-[#0b1220]">{{ $p->initials() }}</a>
-                <ul class="hidden items-center gap-1 text-sm text-white/70 md:flex">
-                    @foreach ($nav as $id => $label)
-                        <li><a href="#{{ $id }}" class="rounded-lg px-3 py-2 hover:bg-white/10 hover:text-white">{{ $label }}</a></li>
-                    @endforeach
-                </ul>
-                @if ($p->email)
-                    <a href="mailto:{{ $p->email }}" class="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-[#0b1220] hover:bg-[#2dd4bf]">Get in touch</a>
-                @endif
-            </div>
-        </nav>
+    {{-- Outside the header block so it stays pinned while the whole page scrolls --}}
+    <nav class="sticky top-0 z-40 border-b border-white/10 bg-[#0b1220]/90 text-white backdrop-blur" aria-label="Sections">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
+            <a href="#top" class="flex size-9 items-center justify-center rounded-xl bg-[#2dd4bf] text-sm font-bold text-[#0b1220]">{{ $p->initials() }}</a>
+            <ul class="hidden items-center gap-1 text-sm text-white/70 md:flex">
+                @foreach ($nav as $id => $label)
+                    <li><a href="#{{ $id }}" class="rounded-lg px-3 py-2 hover:bg-white/10 hover:text-white">{{ $label }}</a></li>
+                @endforeach
+            </ul>
+            @if ($p->email)
+                <a href="mailto:{{ $p->email }}" class="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-[#0b1220] hover:bg-[#2dd4bf]">Get in touch</a>
+            @endif
+        </div>
+    </nav>
 
+    <div class="bg-[#0b1220] text-white">
         <header id="top" class="mx-auto grid max-w-6xl gap-12 px-6 pt-16 pb-28 md:grid-cols-[1fr_auto] md:items-center md:pt-24 md:pb-36">
             <div class="min-w-0">
                 <h1 class="text-[clamp(2.75rem,6.5vw,4.75rem)] leading-[1] font-semibold tracking-[-0.04em] text-balance">{{ $p->full_name }}</h1>
