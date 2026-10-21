@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
@@ -41,11 +42,14 @@ class AuthController extends Controller
 
     public function register(Request $request): RedirectResponse
     {
+        $request->merge(['name' => Str::squish((string) $request->input('name'))]);
+
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:120'],
+            'name' => ['required', 'string', 'max:120', 'regex:/^[\pL\s]+$/u'],
             'email' => ['required', 'email', 'max:160', 'unique:users,email'],
             'password' => ['required', 'confirmed', Password::min(8)],
         ], [
+            'name.regex' => 'Full name can only contain letters and spaces.',
             'email.unique' => 'An account with this email already exists. Log in instead.',
         ]);
 

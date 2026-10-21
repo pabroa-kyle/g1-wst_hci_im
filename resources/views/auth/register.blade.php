@@ -1,8 +1,8 @@
 <x-layouts.auth title="Create account" heading="Create your account" lead="Your portfolios are saved to your account, so only you can edit or delete them.">
     <form method="POST" action="{{ route('register') }}" class="space-y-5" novalidate>
         @csrf
-        <x-field label="Full name" name="name">
-            <input id="name" name="name" type="text" class="field-input" autocomplete="name" required autofocus maxlength="120"
+        <x-field label="Full name" name="name" letters-only>
+            <input id="name" name="name" type="text" class="field-input" autocomplete="name" required autofocus maxlength="120" data-letters-only
                    value="{{ old('name') }}" aria-invalid="{{ $errors->has('name') ? 'true' : 'false' }}">
         </x-field>
         <x-field label="Email" name="email">

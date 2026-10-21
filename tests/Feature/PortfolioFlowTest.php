@@ -36,6 +36,25 @@ class PortfolioFlowTest extends TestCase
         $this->get('/dashboard')->assertOk()->assertSee('Juan’s portfolios', false);
     }
 
+    public function test_register_name_accepts_letters_and_spaces_only(): void
+    {
+        $this->post('/register', [
+            'name' => 'Juan123 Cruz!',
+            'email' => 'bad@example.com',
+            'password' => 'secret-pass',
+            'password_confirmation' => 'secret-pass',
+        ])->assertSessionHasErrors(['name' => 'Full name can only contain letters and spaces.']);
+        $this->assertGuest();
+
+        $this->post('/register', [
+            'name' => '  José   Niño ',
+            'email' => 'jose@example.com',
+            'password' => 'secret-pass',
+            'password_confirmation' => 'secret-pass',
+        ])->assertRedirect('/dashboard');
+        $this->assertDatabaseHas('users', ['email' => 'jose@example.com', 'name' => 'José Niño']);
+    }
+
     public function test_full_required_flow(): void
     {
         Storage::fake('public');
